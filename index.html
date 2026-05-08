@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masterpiece Kartini | Rafa Dzaki Jumayyil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4e342e;
+            --accent: #d4a373;
+            --bg: #fdfaf5;
+            --text: #2d2d2d;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* --- LOGIN OVERLAY --- */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
+                        url('https://images.unsplash.com/photo-1555505019-8c3f1c4aba5f?q=80&w=2070');
+            background-size: cover; background-position: center;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 10000; transition: opacity 0.8s ease;
+        }
+        .login-box {
+            background: var(--white); padding: 40px; border-radius: 20px;
+            width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { font-size: 0.8rem; font-weight: 600; color: #666; }
+        .input-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-top: 5px; outline: none; }
+        .btn-login { 
+            width: 100%; padding: 14px; background: var(--primary); color: white; 
+            border: none; border-radius: 8px; cursor: pointer; font-weight: 600; 
+            margin-top: 10px; transition: 0.3s; 
+        }
+        .btn-login:hover { background: #2b1d1a; }
+        .btn-shortcut { 
+            display: block; width: 100%; margin-top: 20px; color: var(--accent); 
+            background: none; border: none; font-family: inherit; font-size: 0.9rem; 
+            text-decoration: underline; cursor: pointer; font-weight: 600;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.98);
+            padding: 15px 50px; display: flex; justify-content: space-between; align-items: center;
+            z-index: 999; box-shadow: 0 2px 15px rgba(0,0,0,0.1); display: none;
+        }
+        nav .logo { font-family: 'Playfair Display', serif; font-weight: bold; color: var(--primary); font-size: 1.5rem; }
+        nav ul { display: flex; list-style: none; }
+        nav ul li { margin-left: 25px; }
+        nav ul li a { text-decoration: none; color: var(--text); font-size: 0.9rem; font-weight: 600; transition: 0.3s; }
+        nav ul li a:hover { color: var(--accent); }
+
+        /* --- HERO SLIDER --- */
+        #main-content { display: none; }
+        .slider-container { position: relative; height: 100vh; width: 100%; overflow: hidden; }
+        .slide {
+            position: absolute; width: 100%; height: 100%; opacity: 0;
+            transition: opacity 1.2s ease-in-out; display: flex;
+            align-items: center; justify-content: center; text-align: center; color: white;
+            background-size: cover; background-position: center;
+        }
+        .slide.active { opacity: 1; }
+        .slide::after { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.4); z-index: 1; }
+        .slide-content { position: relative; z-index: 2; padding: 20px; }
+        .slide-content h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 8vw, 5.5rem); margin-bottom: 10px; }
+        .slide-content p { font-size: 1.2rem; color: var(--accent); letter-spacing: 3px; font-weight: 300; }
+
+        /* --- SECTIONS --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 100px 20px; }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 3.2rem; text-align: center; margin-bottom: 60px; color: var(--primary); }
+        
+        .grid-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .card { background: var(--white); padding: 40px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); border-bottom: 5px solid var(--accent); transition: 0.4s; }
+        .card:hover { transform: translateY(-10px); }
+        .card h3 { font-family: 'Playfair Display', serif; color: var(--primary); margin-bottom: 15px; font-size: 1.5rem; }
+
+        /* --- FILOSOFI (TAMBAHAN ISI) --- */
+        .philosophy-section { background-color: #f1e9db; padding: 120px 0; border-top: 1px solid #ddd; }
+        .philosophy-text { max-width: 850px; margin: 0 auto; text-align: center; font-size: 1.2rem; line-height: 2.2; font-style: italic; color: #444; }
+
+        /* --- FOOTER --- */
+        footer { background: #1a1a1a; color: white; text-align: center; padding: 80px 20px; }
+        .creator-name { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--accent); margin-top: 15px; letter-spacing: 1px; }
+
+        /* ANIMATION */
+        .fade-in-up { animation: fadeInUp 1s ease forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) { nav { padding: 15px 20px; } nav ul { display: none; } }
+    </style>
+</head>
+<body>
+
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">Portal Rafa Dzaki</h2>
+            <p style="color: #888; font-size: 0.85rem; margin-bottom: 25px;">Edisi Spesial Hari Kartini 2026</p>
+            
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="username" placeholder="Nama Anda">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Password">
+            </div>
+
+            <button class="btn-login" onclick="launchWeb()">Masuk Sekarang</button>
+            <button class="btn-shortcut" onclick="launchWeb()">Lewati & Masuk Sebagai Tamu &rarr;</button>
+        </div>
+    </div>
+
+    <nav id="navbar">
+        <div class="logo">RA KARTINI</div>
+        <ul>
+            <li><a href="#beranda">Beranda</a></li>
+            <li><a href="#sejarah">Sejarah Perjuangan</a></li>
+            <li><a href="#filosofi">Filosofi</a></li>
+            <li><a href="#kreator">Kreator</a></li>
+        </ul>
+    </nav>
+
+    <div id="main-content">
+        <section class="slider-container" id="beranda">
+            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1590073844006-33379778ae09?q=80&w=2045');">
+                <div class="slide-content"><h1>Raden Ajeng Kartini</h1><p>Pahlawan Emansipasi Wanita</p></div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1555505019-8c3f1c4aba5f?q=80&w=2070');">
+                <div class="slide-content"><h1>Habis Gelap Terbitlah Terang</h1><p>Visi Besar Untuk Bangsa</p></div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=2070');">
+                <div class="slide-content"><h1>Edukasi Adalah Kunci</h1><p>Memajukan Martabat Perempuan</p></div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?q=80&w=1974');">
+                <div class="slide-content"><h1>Jejak Budaya</h1><p>Menghargai Warisan Leluhur</p></div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1460518451285-97b6aa326961?q=80&w=2070');">
+                <div class="slide-content"><h1>Kebebasan Berpikir</h1><p>Melampaui Batas Pingitan</p></div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1501503060443-ef4ed1670242?q=80&w=2070');">
+                <div class="slide-content"><h1>Inspirasi Abadi</h1><p>Untuk Generasi Masa Depan</p></div>
+            </div>
+        </section>
+
+        <section class="container" id="sejarah">
+            <h2 class="section-title">Timeline Perjuangan</h2>
+            <div class="grid-info">
+                <div class="card">
+                    <h3>Kelahiran (1879)</h3>
+                    <p>Lahir di Jepara dari keluarga bangsawan. Kartini diberikan hak istimewa untuk sekolah di ELS hingga usia 12 tahun.</p>
+                </div>
+                <div class="card">
+                    <h3>Masa Pingitan</h3>
+                    <p>Setelah lulus ELS, ia harus dipingit sesuai tradisi. Namun, ia tidak berhenti belajar lewat buku-buku dan surat.</p>
+                </div>
+                <div class="card">
+                    <h3>Pemikiran Modern</h3>
+                    <p>Melalui surat kepada Stella Zeehandelaar, ia menyuarakan keinginan agar perempuan memiliki hak yang sama dalam pendidikan.</p>
+                </div>
+                <div class="card">
+                    <h3>Sekolah Kartini</h3>
+                    <p>Ia mendirikan sekolah bagi perempuan pribumi untuk mengajarkan baca-tulis, menjahit, dan budi pekerti.</p>
+                </div>
+                <div class="card">
+                    <h3>Warisan Buku</h3>
+                    <p>Setelah wafatnya, Mr. J.H. Abendanon membukukan surat-suratnya dengan judul "Habis Gelap Terbitlah Terang".</p>
+                </div>
+                <div class="card">
+                    <h3>Pahlawan Nasional</h3>
+                    <p>Tahun 1964, Presiden Soekarno menetapkan Kartini sebagai Pahlawan Kemerdekaan Nasional.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="philosophy-section" id="filosofi">
+            <div class="container">
+                <h2 class="section-title">Mutiara Pemikiran</h2>
+                <div class="philosophy-text">
+                    "Tiada awan di langit yang tetap selamanya. Tiada mungkin akan terus-menerus terang cuaca. Sehabis malam gelap gulita lahir pagi membawa keindahan. Kehidupan manusia serupa alam."
+                    <br><br>
+                    <span style="font-style: normal; font-weight: bold; color: var(--primary);">— R.A. Kartini —</span>
+                </div>
+            </div>
+        </section>
+
+        <footer id="kreator">
+            <p style="letter-spacing: 2px; opacity: 0.6;">PROJECT WEBSITE HARI KARTINI 2026</p>
+            <div style="width: 60px; height: 3px; background: var(--accent); margin: 25px auto;"></div>
+            <p>Dibuat Secara Profesional Oleh:</p>
+            <div class="creator-name">RAFA DZAKI JUMAYYIL</div>
+            <p style="margin-top: 50px; font-size: 0.75rem; opacity: 0.4;">&copy; 2026 Rafa Dzaki | Semua Hak Cipta Dilindungi.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Fungsi untuk masuk ke website
+        function launchWeb() {
+            const overlay = document.getElementById('login-overlay');
+            const main = document.getElementById('main-content');
+            const navbar = document.getElementById('navbar');
+
+            // Sembunyikan Overlay
+            overlay.style.opacity = '0';
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                // Tampilkan Konten
+                main.style.display = 'block';
+                navbar.style.display = 'flex';
+                // Jalankan animasi slide & konten
+                initSlider();
+                main.classList.add('fade-in-up');
+            }, 800);
+        }
+
+        // Fungsi Slider Otomatis (6 Gambar)
+        function initSlider() {
+            const slides = document.querySelectorAll('.slide');
+            let currentIndex = 0;
+
+            setInterval(() => {
+                slides[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % slides.length;
+                slides[currentIndex].classList.add('active');
+            }, 5000); // Ganti gambar tiap 5 detik
+        }
+    </script>
+</body>
+</html>
